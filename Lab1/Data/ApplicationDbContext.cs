@@ -1,0 +1,16 @@
+﻿using Lab1.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+namespace Lab1.Data
+{
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+        public DbSet<Employer> Employer { get; set; }
+        public DbSet<Lab1.Models.Employee> Employee { get; set; }
+    }
+}
