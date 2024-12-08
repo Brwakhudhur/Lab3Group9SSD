@@ -24,7 +24,7 @@ namespace Lab1.Controllers
 
         // GET: Employers
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Managers,Member")]
         public async Task<IActionResult> Index()
         {
               return View(await _context.Employer.ToListAsync());

@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab1.Data;
 using Lab1.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lab1.Controllers
 {
+    [Authorize(Roles = "Managers")]
+
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,6 +23,9 @@ namespace Lab1.Controllers
         }
 
         // GET: Employees
+
+        [AllowAnonymous]
+
         public async Task<IActionResult> Index()
         {
               return View(await _context.Employee.ToListAsync());

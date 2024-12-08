@@ -25,6 +25,10 @@ namespace Lab1
 
             var app = builder.Build();
 
+            var configuration = app.Services.GetService<IConfiguration>();
+            var secrets = configuration.GetSection("Secrets").Get<AppSecrets>();
+            DbInitializer.appSecrets = secrets;
+
             using( var scope = app.Services.CreateScope())
             {
                 DbInitializer.SeedUsersAndRoles(scope.ServiceProvider).Wait();
@@ -41,6 +45,23 @@ namespace Lab1
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+
+
+            app.Use(async (context, next) =>
+            {
+                // Add headers to the response
+                context.Response.Headers.Add("Content-Security-Policy", "upgrade-insecure-requests; default-src 'self'; style-src 'self'; script-src 'self'; img-src 'none'; frame-ancestors 'self'");
+                context.Response.Headers.Add("Access-Control-Allow-Origin","https://ssdgroup9app.azurewebsites.net");
+                context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+
+
+                await next();
+
+
+            });
+
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
